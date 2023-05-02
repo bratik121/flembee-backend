@@ -5,6 +5,8 @@ import { DatabaseModule } from 'src/config/db.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from 'src/entities/user.entity';
+import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
@@ -13,8 +15,9 @@ import { User } from 'src/entities/user.entity';
       secret: 'secret', //process.env.SECRET,
       signOptions: { expiresIn: '12h' },
     }),
+    PassportModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
