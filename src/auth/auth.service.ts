@@ -1,25 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto, LoginAuthDto } from './DTO/auth.dto';
+import { RegisterAuthDto, LoginAuthDto } from './DTO/auth.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
+import { hash, compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectRepository(User) private authRepository: Repository<User>,
+  ) {}
+
+  async register(registerAuthDto: RegisterAuthDto) {
+    const { password } = registerAuthDto; //contraseña plana
+    const plainToHash = await hash(password, 10); //contraseña encriptada
+    return this.authRepository.save({
+      ...registerAuthDto,
+      password: plainToHash,
+    });
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login(loginAuthDto: LoginAuthDto) {
+    const findUSer = await this.authRepository.findOne({
+      where: { username: loginAuthDto.username },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: LoginAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    if (!findUSer) {
+      return { code: 404, message: 'Usuario no encontrado' };
+    } else {
+      const isMatch = await compare(loginAuthDto.password, findUSer.password);
+      if (!isMatch) {
+        return { code: 400, message: 'Contraseña incorrecta' };
+      }
+      return { code: 200, message: 'Usuario logueado' };
+    }
   }
 }
