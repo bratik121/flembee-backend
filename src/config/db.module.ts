@@ -9,9 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: 5432, // database host+
       username: 'postgres', // username+
       password: '12345678', // user password+
-      database: 'taskmanagement', // name of our database+
+      database: 'flembeeDB', // name of our database+
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // entities (database table) we want to load+
-      synchronize: true, // synchronize database schema with the schema in the entities+
+      synchronize: true, // synchronize database schema with the schema in the entities
     }),
   ],
 })
