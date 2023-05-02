@@ -1,6 +1,11 @@
 import { TaskStatus } from '../../entities/task.entity';
-import { IsNotEmpty, IsString, MinLength, IsOptional } from 'class-validator';
-import { IsIn } from 'class-validator/types/decorator/decorators';
+import {
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  IsOptional,
+  IsIn,
+} from 'class-validator';
 
 export class createTaskDto {
   @IsString()
@@ -8,6 +13,7 @@ export class createTaskDto {
   @MinLength(3)
   title: string;
   description: string;
+  status: TaskStatus = TaskStatus.PENDING;
 }
 
 export class taskByIdDto {

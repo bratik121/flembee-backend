@@ -16,3 +16,12 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 }
+
+export class LogUserDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}

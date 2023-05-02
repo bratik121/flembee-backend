@@ -13,8 +13,8 @@ class Task {
   @Column()
   title: string;
   @Column()
-  descrition: string;
-  @Column()
+  description: string;
+  @Column({ default: TaskStatus.PENDING })
   status: TaskStatus;
   @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
