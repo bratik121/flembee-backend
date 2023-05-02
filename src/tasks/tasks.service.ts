@@ -13,4 +13,7 @@ export class TasksService {
     const newTask = this.taskRepository.create(task);
     return this.taskRepository.save(newTask);
   }
+  async getAllTask() {
+    return this.taskRepository.find();
+  }
 }
