@@ -17,10 +17,12 @@ export class AuthService {
     const { password } = registerAuthDto; //contraseña plana
     const plainToHash = await hash(password, 10); //contraseña encriptada
     //registro el usuario en la bases de datos
-    return this.authRepository.save({
+    const data = this.authRepository.create({
       ...registerAuthDto,
       password: plainToHash,
     });
+    await this.authRepository.save(data);
+    return { code: 201, message: 'Usuario creado correctamente', data };
   }
 
   async login(loginAuthDto: LoginAuthDto) {
@@ -39,10 +41,11 @@ export class AuthService {
         return { code: 400, message: 'Contraseña incorrecta' };
       }
       //si coinciden retorno el token y el usuario
-      const payload = { usernae: findUSer.username };
+      const { password, ...rest } = findUSer; //quito la contraseña del objeto
+      const payload = { username: findUSer.username };
       const token = await this.jwtService.signAsync(payload);
       const data = {
-        username: findUSer.username,
+        rest,
         token,
       };
       return { code: 200, data };

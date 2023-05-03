@@ -5,19 +5,26 @@ import {
   MinLength,
   IsOptional,
   IsIn,
+  IsNumber,
 } from 'class-validator';
 
 export class createTaskDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Title is required' })
   @MinLength(3)
   title: string;
+  @IsString()
+  @IsNotEmpty()
   description: string;
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
+  @IsIn([TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.DONE])
   status: TaskStatus = TaskStatus.PENDING;
 }
 
 export class taskByIdDto {
-  id: string;
+  id: number;
 }
 
 // con ? ts identifica que es opcional

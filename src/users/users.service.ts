@@ -13,4 +13,7 @@ export class UsersService {
     const newUser = await this.userRepository.create(user);
     return this.userRepository.save(newUser);
   }
+  async getUser(id: number) {
+    return this.userRepository.findOne({ where: { id } });
+  }
 }
